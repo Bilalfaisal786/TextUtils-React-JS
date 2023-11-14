@@ -3,37 +3,83 @@ import './TextForm.css';
 
 export default function TextForm(props) {
 
+    // const handleUpClick = () => {
+    //     if (text.trim() === "") {
+    //         props.showAlert("Please enter something in the textbox below to perform any action", "warning");
+    //     } else {
+    //     console.log("Upper case was clicked" + text)
+    //     let newText = text.toUpperCase()
+    //     setText(newText)
+    //     props.showAlert("Converted to uppercase", "success")
+    //     }
+    // }
+
     const handleUpClick = () => {
-        // if (text.trim() === "") {
-        //     props.showAlert("Please enter something in the textbox below to perform any action", "warning");
-        // } else {
-        // console.log("Upper case was clicked" + text)
-        let newText = text.toUpperCase()
-        setText(newText)
-        props.showAlert("Converted to uppercase", "success")
-        // }
+        if (text === text.toUpperCase()) {
+            props.showAlert("Text is already in Uppercase", "warning");
+        } else {
+            let newText = text.toUpperCase();
+            setText(newText);
+            props.showAlert("Converted to Uppercase", "success");
+        }
     }
+
+    // const handleLowClick = () => {
+
+    //     let newText = text.toLowerCase()
+    //     setText(newText)
+    //     props.showAlert("Converted to Lowercase", "success")
+
+    // }
+
     const handleLowClick = () => {
-
-        let newText = text.toLowerCase()
-        setText(newText)
-        props.showAlert("Converted to Lowercase", "success")
-
+        if (text === text.toLowerCase()) {
+            props.showAlert("Text is already in Lowercase", "warning");
+        } else {
+            let newText = text.toLowerCase();
+            setText(newText);
+            props.showAlert("Converted to Lowercase", "success");
+        }
     }
+
+
+    // const handleRnClick = () => {
+
+    //     let newText = text.replace(/[0-9]/g, '');
+    //     setText(newText)
+    //     props.showAlert("All Numbers Removed successfully", "success")
+
+    // }
+
     const handleRnClick = () => {
-
-        let newText = text.replace(/[0-9]/g, '');
-        setText(newText)
-        props.showAlert("All Numbers Removed successfully", "success")
-
+        if (!/[0-9]/.test(text)) {
+            props.showAlert("Text doesn't contain numbers", "warning");
+        } else {
+            let newText = text.replace(/[0-9]/g, '');
+            setText(newText);
+            props.showAlert("All Numbers Removed successfully", "success");
+        }
     }
+
+    // const handleRaClick = () => {
+
+    //     let newText = text.replace(/[a-zA-Z]/g, '');
+    //     setText(newText)
+    //     props.showAlert("All Alphabet Removed successfully", "success")
+
+    // }
+
     const handleRaClick = () => {
-
-        let newText = text.replace(/[a-zA-Z]/g, '');
-        setText(newText)
-        props.showAlert("All Alphabet Removed successfully", "success")
-
+        if (!/[a-zA-Z]/.test(text)) {
+            props.showAlert("Text doesn't contain alphabets", "warning");
+        } else {
+            let newText = text.replace(/[a-zA-Z]/g, '');
+            setText(newText);
+            props.showAlert("All Alphabets Removed successfully", "success");
+        }
     }
+
+
     const handleClearClick = () => {
 
         let newText = "";
@@ -59,13 +105,25 @@ export default function TextForm(props) {
         props.showAlert("Text Copied successfully in the ClipBoard", "success")
 
     }
+    // const handleRemoveSpacesClick = () => {
+
+    //     let newText = text.replace(/\s+/g, ' ').trim(); // Remove extra spaces
+    //     setText(newText);
+    //     props.showAlert("Extra Spaces Removed successfully", "success");
+
+    // }
+
+
     const handleRemoveSpacesClick = () => {
-
-        let newText = text.replace(/\s+/g, ' ').trim(); // Remove extra spaces
-        setText(newText);
-        props.showAlert("Extra Spaces Removed successfully", "success");
-
+        if (!/\s+/.test(text)) {
+            props.showAlert("No extra spaces to remove", "warning");
+        } else {
+            let newText = text.replace(/\s+/g, ' ').trim(); // Remove extra spaces
+            setText(newText);
+            props.showAlert("Extra Spaces Removed successfully", "success");
+        }
     }
+
 
     const handleSearchReplace = () => {
         const searchTerm = prompt("Enter search term:");
@@ -83,6 +141,18 @@ export default function TextForm(props) {
             props.showAlert("Search and Replace cancelled", "warning");
         }
     };
+
+    const handleDownloadClick = () => {
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'textfile.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        props.showAlert("Text Downloaded successfully", "success");
+    }
 
 
     const handleOnChange = (event) => {
@@ -116,6 +186,7 @@ export default function TextForm(props) {
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleCutClick}>Cut Text</button>
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleRemoveSpacesClick}>Remove Extra Spaces</button>
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleSearchReplace}>Search And Replace</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleDownloadClick}>Download Text</button>
 
 
             </div>
