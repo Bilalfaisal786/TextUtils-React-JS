@@ -34,21 +34,44 @@ export default function TextForm(props) {
         }
     }
 
+    // const handleRnClick = () => {
+    //     if (!/[0-9]/.test(text)) {
+    //         props.showAlert("Text doesn't contain numbers", "warning");
+    //     } else {
+    //         let newText = text.replace(/[0-9]/g, '');
+    //         setText(newText);
+    //         props.showAlert("All Numbers Removed successfully", "success");
+    //     }
+    // }
     const handleRnClick = () => {
         if (!/[0-9]/.test(text)) {
             props.showAlert("Text doesn't contain numbers", "warning");
         } else {
             let newText = text.replace(/[0-9]/g, '');
+            // Replace consecutive spaces with a single space
+            newText = newText.replace(/\s+/g, ' ').trim();
             setText(newText);
             props.showAlert("All Numbers Removed successfully", "success");
         }
     }
+    // const handleRaClick = () => {
+    //     if (!/[a-zA-Z]/.test(text)) {
+    //         props.showAlert("Text doesn't contain alphabets", "warning");
+    //     } else {
+    //         let newText = text.replace(/[a-zA-Z]/g, '');
+    //         setText(newText);
+    //         props.showAlert("All Alphabets Removed successfully", "success");
+    //     }
+    // }
+
 
     const handleRaClick = () => {
         if (!/[a-zA-Z]/.test(text)) {
             props.showAlert("Text doesn't contain alphabets", "warning");
         } else {
             let newText = text.replace(/[a-zA-Z]/g, '');
+            // Replace consecutive spaces with a single space
+            newText = newText.replace(/\s+/g, ' ').trim();
             setText(newText);
             props.showAlert("All Alphabets Removed successfully", "success");
         }
@@ -124,8 +147,12 @@ export default function TextForm(props) {
 
     // Add this function to calculate the progress percentage
     const calculateProgress = () => {
-        return (text.length / MAX_CHARACTER_LIMIT) * 100;
+        const characterCountWithoutSpaces = text.replace(/\s/g, '').length;
+
+        return (characterCountWithoutSpaces / MAX_CHARACTER_LIMIT) * 100;
     };
+
+
 
     const handleOnChange = (event) => {
         setText(event.target.value)
@@ -149,12 +176,14 @@ export default function TextForm(props) {
                     }} id="myBox" rows="8" placeholder='Write Your Text Here' ></textarea>
                 </div>
 
-                <ProgressBar
-                    variant={text.length <= MAX_CHARACTER_LIMIT ? 'success' : 'danger'}
-                    now={calculateProgress()}
-                    label={`${text.length}/${MAX_CHARACTER_LIMIT} characters`}
-                    className="my-2"
-                />
+                <div style={{ position: 'relative', height: '30px' }}>
+                    <ProgressBar
+                        variant={text.length <= MAX_CHARACTER_LIMIT ? 'success' : 'danger'}
+                        now={calculateProgress()}
+                        label={`${text.replace(/\s/g, '').length}/${MAX_CHARACTER_LIMIT} characters`}
+                        className="my-2"
+                    />
+                </div>
 
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleUpClick}>Convert to UpperCase</button>
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleLowClick}>Convert to LowerCase</button>
@@ -177,7 +206,10 @@ export default function TextForm(props) {
                     Your Text Summary
                 </h1>
                 <p className="MyCss1">
-                    {text.trim() === "" ? "0 Word" : `${text.trim().split(" ").length} ${text.trim().split(" ").length === 1 ? 'Word' : 'Words'}`} and {text.trim().replace(/\s/g, '').length} {text.trim().length === 1 ? 'Character' : 'Characters'}
+                    <p className="MyCss1">
+                        {text.trim() === "" ? "0 Word" : `${text.trim().split(/\s+/).filter(Boolean).length} ${text.trim().split(/\s+/).filter(Boolean).length === 1 ? 'Word' : 'Words'}`} and {text.replace(/\s/g, '').length} {text.length === 1 ? 'Character' : 'Characters'}
+                    </p>
+
                 </p>
                 <p className="MyCss1">
                     Take Probably {text.trim() === "" ? "0" : (0.008 * text.trim().split(" ").length).toFixed(2)} Minutes to read
