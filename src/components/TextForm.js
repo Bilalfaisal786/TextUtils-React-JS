@@ -23,15 +23,6 @@ export default function TextForm(props) {
             props.showAlert("Converted to Uppercase", "success");
         }
     }
-
-    // const handleLowClick = () => {
-
-    //     let newText = text.toLowerCase()
-    //     setText(newText)
-    //     props.showAlert("Converted to Lowercase", "success")
-
-    // }
-
     const handleLowClick = () => {
         if (text === text.toLowerCase()) {
             props.showAlert("Text is already in Lowercase", "warning");
@@ -41,15 +32,6 @@ export default function TextForm(props) {
             props.showAlert("Converted to Lowercase", "success");
         }
     }
-
-
-    // const handleRnClick = () => {
-
-    //     let newText = text.replace(/[0-9]/g, '');
-    //     setText(newText)
-    //     props.showAlert("All Numbers Removed successfully", "success")
-
-    // }
 
     const handleRnClick = () => {
         if (!/[0-9]/.test(text)) {
@@ -61,14 +43,6 @@ export default function TextForm(props) {
         }
     }
 
-    // const handleRaClick = () => {
-
-    //     let newText = text.replace(/[a-zA-Z]/g, '');
-    //     setText(newText)
-    //     props.showAlert("All Alphabet Removed successfully", "success")
-
-    // }
-
     const handleRaClick = () => {
         if (!/[a-zA-Z]/.test(text)) {
             props.showAlert("Text doesn't contain alphabets", "warning");
@@ -78,7 +52,6 @@ export default function TextForm(props) {
             props.showAlert("All Alphabets Removed successfully", "success");
         }
     }
-
 
     const handleClearClick = () => {
 
@@ -105,14 +78,6 @@ export default function TextForm(props) {
         props.showAlert("Text Copied successfully in the ClipBoard", "success")
 
     }
-    // const handleRemoveSpacesClick = () => {
-
-    //     let newText = text.replace(/\s+/g, ' ').trim(); // Remove extra spaces
-    //     setText(newText);
-    //     props.showAlert("Extra Spaces Removed successfully", "success");
-
-    // }
-
 
     const handleRemoveSpacesClick = () => {
         if (!/\s+/.test(text)) {
@@ -123,7 +88,6 @@ export default function TextForm(props) {
             props.showAlert("Extra Spaces Removed successfully", "success");
         }
     }
-
 
     const handleSearchReplace = () => {
         const searchTerm = prompt("Enter search term:");
