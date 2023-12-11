@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './TextForm.css';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function TextForm(props) {
 
@@ -117,11 +118,19 @@ export default function TextForm(props) {
         document.body.removeChild(a);
         props.showAlert("Text Downloaded successfully", "success");
     }
+    const MAX_CHARACTER_LIMIT = 500; // You can adjust this limit based on your preference
 
+    // ...
+
+    // Add this function to calculate the progress percentage
+    const calculateProgress = () => {
+        return (text.length / MAX_CHARACTER_LIMIT) * 100;
+    };
 
     const handleOnChange = (event) => {
         setText(event.target.value)
     }
+
 
     const [text, setText] = useState("")
 
@@ -134,12 +143,18 @@ export default function TextForm(props) {
             <div className="container my-3" style={{ color: props.mode === 'dark' ? 'white' : '#042743' }}>
                 <h1 className="mb-4"> {props.heading}</h1>
                 <div className="mb-3">
-                    <textarea className="form-control" value={text} onChange={handleOnChange} style={{
+                    <textarea className="form-control" value={text} onChange={handleOnChange} maxLength={MAX_CHARACTER_LIMIT} style={{
                         backgroundColor: props.mode === 'dark' ? '#13466e' : 'white',
-                        color: props.mode === 'dark' ? 'white' : '#042743',
-                    }} id="myBox" rows="8" placeholder='Write Your Text Here'></textarea>
+                        color: props.mode === 'dark' ? 'white' : '#042743', overflowWrap: 'break-word',
+                    }} id="myBox" rows="8" placeholder='Write Your Text Here' ></textarea>
                 </div>
 
+                <ProgressBar
+                    variant={text.length <= MAX_CHARACTER_LIMIT ? 'success' : 'danger'}
+                    now={calculateProgress()}
+                    label={`${text.length}/${MAX_CHARACTER_LIMIT} characters`}
+                    className="my-2"
+                />
 
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleUpClick}>Convert to UpperCase</button>
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleLowClick}>Convert to LowerCase</button>
@@ -151,6 +166,7 @@ export default function TextForm(props) {
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleRemoveSpacesClick}>Remove Extra Spaces</button>
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleSearchReplace}>Search And Replace</button>
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleDownloadClick}>Download Text</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={() => props.showAlert(`Current character count: ${text.length}`, "info")}>Character Count</button>
 
 
             </div>
