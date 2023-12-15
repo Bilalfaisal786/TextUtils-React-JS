@@ -3,7 +3,8 @@ import './TextForm.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function TextForm(props) {
-    
+    const [text, setText] = useState("");
+
     // const handleUpClick = () => {
     //     if (text.trim() === "") {
     //         props.showAlert("Please enter something in the textbox below to perform any action", "warning");
@@ -35,7 +36,7 @@ export default function TextForm(props) {
         }
     }
 
-// const handleRnClick = () => {
+    // const handleRnClick = () => {
     //     if (!/[0-9]/.test(text)) {
     //         props.showAlert("Text doesn't contain numbers", "warning");
     //     } else {
@@ -49,13 +50,13 @@ export default function TextForm(props) {
             props.showAlert("Text doesn't contain numbers", "warning");
         } else {
             let newText = text.replace(/[0-9]/g, '');
-// Replace consecutive spaces with a single space
+            // Replace consecutive spaces with a single space
             newText = newText.replace(/\s+/g, ' ').trim();
             setText(newText);
             props.showAlert("All Numbers Removed successfully", "success");
         }
     }
-// const handleRaClick = () => {
+    // const handleRaClick = () => {
     //     if (!/[a-zA-Z]/.test(text)) {
     //         props.showAlert("Text doesn't contain alphabets", "warning");
     //     } else {
@@ -71,7 +72,7 @@ export default function TextForm(props) {
             props.showAlert("Text doesn't contain alphabets", "warning");
         } else {
             let newText = text.replace(/[a-zA-Z]/g, '');
-// Replace consecutive spaces with a single space
+            // Replace consecutive spaces with a single space
             newText = newText.replace(/\s+/g, ' ').trim();
             setText(newText);
             props.showAlert("All Alphabets Removed successfully", "success");
@@ -91,7 +92,7 @@ export default function TextForm(props) {
         // Assuming that "cut" means deleting all text and copying it
         // Copy text to clipboard
         navigator.clipboard.writeText(text);
-// Set text state to an empty string
+        // Set text state to an empty string
         setText('');
         props.showAlert("Text Cutted successfully", "success")
 
@@ -144,16 +145,24 @@ export default function TextForm(props) {
         document.body.removeChild(a);
         props.showAlert("Text Downloaded successfully", "success");
     }
-const MAX_CHARACTER_LIMIT = 500; // You can adjust this limit based on your preference
+    const MAX_CHARACTER_LIMIT = 500; // You can adjust this limit based on your preference
 
     // ...
 
-// Add this function to calculate the progress percentage
+    // Add this function to calculate the progress percentage
     const calculateProgress = () => {
         const characterCountWithoutSpaces = text.replace(/\s/g, '').length;
         const adjustedMaxLength = MAX_CHARACTER_LIMIT + text.split(/\s+/).length - 1;
+    
+        // If the character count is equal to or greater than 500, return 100%
+        if (characterCountWithoutSpaces >= 500) {
+            return 100;
+        }
+    
+        // Otherwise, calculate the progress percentage
         return (characterCountWithoutSpaces / adjustedMaxLength) * 100;
     };
+    
 
     const handleOnChange = (event) => {
         setText(event.target.value);
@@ -183,12 +192,13 @@ const MAX_CHARACTER_LIMIT = 500; // You can adjust this limit based on your pref
                 </div>
 
                 <div style={{ position: 'relative', height: '30px' }}>
-                    <ProgressBar
-                        variant={text.replace(/\s/g, '').length <= adjustedMaxLength ? 'success' : 'danger'}
-                        now={calculateProgress()}
-                        label={`${text.replace(/\s/g, '').length}/${adjustedMaxLength} characters`}
-                        className="my-2"
-                    />
+                <ProgressBar
+    variant={text.replace(/\s/g, '').length >= 500 ? 'danger' : 'success'}
+    now={calculateProgress()}
+    label={`${text.replace(/\s/g, '').length}/${adjustedMaxLength} characters`}
+    className="my-2"
+/>
+
                 </div>
 
                 <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleUpClick}>Convert to UpperCase</button>
