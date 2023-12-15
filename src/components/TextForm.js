@@ -3,7 +3,7 @@ import './TextForm.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export default function TextForm(props) {
-
+    
     // const handleUpClick = () => {
     //     if (text.trim() === "") {
     //         props.showAlert("Please enter something in the textbox below to perform any action", "warning");
@@ -24,6 +24,7 @@ export default function TextForm(props) {
             props.showAlert("Converted to Uppercase", "success");
         }
     }
+
     const handleLowClick = () => {
         if (text === text.toLowerCase()) {
             props.showAlert("Text is already in Lowercase", "warning");
@@ -34,7 +35,7 @@ export default function TextForm(props) {
         }
     }
 
-    // const handleRnClick = () => {
+// const handleRnClick = () => {
     //     if (!/[0-9]/.test(text)) {
     //         props.showAlert("Text doesn't contain numbers", "warning");
     //     } else {
@@ -48,13 +49,13 @@ export default function TextForm(props) {
             props.showAlert("Text doesn't contain numbers", "warning");
         } else {
             let newText = text.replace(/[0-9]/g, '');
-            // Replace consecutive spaces with a single space
+// Replace consecutive spaces with a single space
             newText = newText.replace(/\s+/g, ' ').trim();
             setText(newText);
             props.showAlert("All Numbers Removed successfully", "success");
         }
     }
-    // const handleRaClick = () => {
+// const handleRaClick = () => {
     //     if (!/[a-zA-Z]/.test(text)) {
     //         props.showAlert("Text doesn't contain alphabets", "warning");
     //     } else {
@@ -70,7 +71,7 @@ export default function TextForm(props) {
             props.showAlert("Text doesn't contain alphabets", "warning");
         } else {
             let newText = text.replace(/[a-zA-Z]/g, '');
-            // Replace consecutive spaces with a single space
+// Replace consecutive spaces with a single space
             newText = newText.replace(/\s+/g, ' ').trim();
             setText(newText);
             props.showAlert("All Alphabets Removed successfully", "success");
@@ -84,16 +85,18 @@ export default function TextForm(props) {
         props.showAlert("Text Cleared successfully", "success")
 
     }
+
     const handleCutClick = () => {
 
         // Assuming that "cut" means deleting all text and copying it
         // Copy text to clipboard
         navigator.clipboard.writeText(text);
-        // Set text state to an empty string
+// Set text state to an empty string
         setText('');
         props.showAlert("Text Cutted successfully", "success")
 
     }
+
     const handleCopyClick = () => {
 
         // Copy text to clipboard
@@ -141,46 +144,49 @@ export default function TextForm(props) {
         document.body.removeChild(a);
         props.showAlert("Text Downloaded successfully", "success");
     }
-    const MAX_CHARACTER_LIMIT = 500; // You can adjust this limit based on your preference
+const MAX_CHARACTER_LIMIT = 500; // You can adjust this limit based on your preference
 
     // ...
 
-    // Add this function to calculate the progress percentage
+// Add this function to calculate the progress percentage
     const calculateProgress = () => {
         const characterCountWithoutSpaces = text.replace(/\s/g, '').length;
-
-        return (characterCountWithoutSpaces / MAX_CHARACTER_LIMIT) * 100;
+        const adjustedMaxLength = MAX_CHARACTER_LIMIT + text.split(/\s+/).length - 1;
+        return (characterCountWithoutSpaces / adjustedMaxLength) * 100;
     };
 
-
-
     const handleOnChange = (event) => {
-        setText(event.target.value)
+        setText(event.target.value);
     }
 
-
-    const [text, setText] = useState("")
-
-    //text = "new text" // Wrong way to change the state
-    //setText("new text") // Correct way to change the state   
-
+    const adjustedMaxLength = MAX_CHARACTER_LIMIT + text.split(/\s+/).filter(Boolean).length - 1;
 
     return (
         <>
             <div className="container my-3" style={{ color: props.mode === 'dark' ? 'white' : '#042743' }}>
                 <h1 className="mb-4"> {props.heading}</h1>
                 <div className="mb-3">
-                    <textarea className="form-control" value={text} onChange={handleOnChange} maxLength={MAX_CHARACTER_LIMIT} style={{
-                        backgroundColor: props.mode === 'dark' ? '#13466e' : 'white',
-                        color: props.mode === 'dark' ? 'white' : '#042743', overflowWrap: 'break-word',
-                    }} id="myBox" rows="8" placeholder='Write Your Text Here' ></textarea>
+                    <textarea
+                        className="form-control"
+                        value={text}
+                        onChange={handleOnChange}
+                        maxLength={MAX_CHARACTER_LIMIT + text.split(/\s+/).filter(Boolean).length - 1}
+                        style={{
+                            backgroundColor: props.mode === 'dark' ? '#13466e' : 'white',
+                            color: props.mode === 'dark' ? 'white' : '#042743',
+                            overflowWrap: 'break-word',
+                        }}
+                        id="myBox"
+                        rows="8"
+                        placeholder='Write Your Text Here'
+                    ></textarea>
                 </div>
 
                 <div style={{ position: 'relative', height: '30px' }}>
                     <ProgressBar
-                        variant={text.length <= MAX_CHARACTER_LIMIT ? 'success' : 'danger'}
+                        variant={text.replace(/\s/g, '').length <= adjustedMaxLength ? 'success' : 'danger'}
                         now={calculateProgress()}
-                        label={`${text.replace(/\s/g, '').length}/${MAX_CHARACTER_LIMIT} characters`}
+                        label={`${text.replace(/\s/g, '').length}/${adjustedMaxLength} characters`}
                         className="my-2"
                     />
                 </div>
